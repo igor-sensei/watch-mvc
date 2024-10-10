@@ -7,5 +7,6 @@
     "moduleResolution": "node",
     "jsx": "react",
     "allowJs": true
-  }
+  },
+  "include": ["src", "**/*.test.ts"]
 }

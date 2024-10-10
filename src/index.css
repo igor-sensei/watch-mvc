@@ -1,3 +1,38 @@
-h1 {
-    color: red;
+/* General watch display styles */
+#watch-display {
+    font-family: monospace;
+    font-size: 3rem;
+    text-align: center;
+    padding: 20px;
+    width: 250px;
+    margin: 20px auto;
+    border-radius: 10px;
+    transition: background-color 0.3s;
+}
+
+/* Blinking effect for editable parts */
+.blink {
+    animation: blink-animation 1s steps(2, start) infinite;
+}
+
+@keyframes blink-animation {
+    to {
+        visibility: hidden;
+    }
+}
+
+/* Button styles */
+button {
+    font-size: 1rem;
+    padding: 8px;
+    margin: 5px;
+    border-radius: 3px;
+    background-color: lightblue;
+    color: black;
+}
+
+/* Container for buttons */
+#button-container {
+    text-align: center;
+    margin-top: 10px;
 }

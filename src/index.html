@@ -3,11 +3,21 @@
 
 <head>
     <meta charset="utf-8">
-    <title><%= htmlWebpackPlugin.options.title %></title>
-    <!-- support for mobile touch devices -->
-    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Watch Model-View-Controller Application</title>
 </head>
+
 <body>
-    <h1>Empty Page</h1>
+    <!-- Create a watch -->
+    <div id="watch-display">00:00:00</div>
+    <div id="button-container">
+        <button id="mode-button">Mode</button>
+        <button id="increase-button">Increase</button>
+        <button id="light-button">Light</button>
+    </div>
+
+    <!-- Plug-in the application logic -->
+    <script src="bundle.js"></script>
 </body>
+
 </html>
