@@ -1,7 +1,10 @@
 // A few simple tests for WatchModel and WatchController.
 // WatchView is more delicate to test separately, skipping for simplicity.
 
-import { WatchModel, WatchView, WatchController } from './watch';
+import { WatchModel } from "./WatchModel";
+import { WatchView } from "./WatchView";
+import { WatchController } from "./WatchController";
+
 import { JSDOM } from 'jsdom';
 
 describe('WatchModel', () => {
@@ -13,52 +16,52 @@ describe('WatchModel', () => {
 
     test('initial state should be correct', () => {
         const now = new Date();
-        const { hours, minutes, seconds } = model.getTime();
-        expect(model.getEditMode()).toBe("NONE");
-        expect(model.isLightOn()).toBe(false);
+        const { hours, minutes, seconds } = model.time;
+        expect(model.editMode).toBe("NONE");
+        expect(model.isLightOn).toBe(false);
     });
 
     test('tick should increase seconds', () => {
-        const time = model.getTime();
-        model.tick();
-        expect(model.getTime().seconds).toBe((time.seconds + 1) % 60);
+        const time = model.time;
+        model.time.tick();
+        expect(model.time.seconds).toBe((time.seconds + 1) % 60);
     });
 
     test('toggleEditMode should cycle through modes', () => {
         const modes = ["HOURS", "MINUTES", "NONE"]; // The same order as defined in constructor
         modes.forEach(mode => {
             model.toggleEditMode();
-            expect(model.getEditMode()).toBe(mode);
+            expect(model.editMode).toBe(mode);
         });
     });
 
     test('increaseTime should increase hours or minutes based on edit mode', () => {
-        const time = model.getTime();
+        const time = model.time;
         model.toggleEditMode();
         model.incrementTime();
-        expect(model.getTime().hours).toBe((time.hours + 1) % 24);
+        expect(model.time.hours).toBe((time.hours + 1) % 24);
 
         model.toggleEditMode();
         model.incrementTime();
-        expect(model.getTime().minutes).toBe((time.minutes + 1) % 60);
+        expect(model.time.minutes).toBe((time.minutes + 1) % 60);
     });
 
     test('increasing minutes 60 times should result in an hour increase', () => {
-        const time = model.getTime();
+        const time = model.time;
         model.toggleEditMode(); // Set to MINUTES edit mode
         model.toggleEditMode();
         for (let i = 0; i < 60; i++) {
             model.incrementTime();
         }
-        expect(model.getTime().minutes).toBe(time.minutes);
-        expect(model.getTime().hours).toBe((time.hours + 1) % 24);
+        expect(model.time.minutes).toBe(time.minutes);
+        expect(model.time.hours).toBe((time.hours + 1) % 24);
     });
 
     test('toggleLight should toggle light state', () => {
         model.toggleLight();
-        expect(model.isLightOn()).toBe(true);
+        expect(model.isLightOn).toBe(true);
         model.toggleLight();
-        expect(model.isLightOn()).toBe(false);
+        expect(model.isLightOn).toBe(false);
     });
 });
 
@@ -85,18 +88,18 @@ describe('WatchController', () => {
 
     test('mode button should toggle edit mode', () => {
         document.getElementById('mode-button')!.click();
-        expect(model.getEditMode()).toBe("HOURS");
+        expect(model.editMode).toBe("HOURS");
     });
 
     test('increase button should increase time based on edit mode', () => {
-        const time = model.getTime()
+        const time = model.time
         model.toggleEditMode();
         document.getElementById('increase-button')!.click();
-        expect(model.getTime().hours).toBe((time.hours + 1) % 24);
+        expect(model.time.hours).toBe((time.hours + 1) % 24);
     });
 
     test('light button should toggle light', () => {
         document.getElementById('light-button')!.click();
-        expect(model.isLightOn()).toBe(true);
+        expect(model.isLightOn).toBe(true);
     });
 });
