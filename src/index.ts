@@ -1,3 +1,4 @@
-import './index.css';
-import { PageController } from './PageController';
+import "./index.css";
+import { PageController } from "./watch/PageController";
+
 new PageController();

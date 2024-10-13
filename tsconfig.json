@@ -4,9 +4,12 @@
     "noImplicitAny": true,
     "module": "es6",
     "target": "es5",
+    "sourceMap": true,
     "moduleResolution": "node",
     "jsx": "react",
     "allowJs": true
   },
-  "include": ["src", "**/*.test.ts"]
+  "include": [
+    "**/*.ts"
+  ]
 }
