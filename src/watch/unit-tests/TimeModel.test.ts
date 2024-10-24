@@ -14,7 +14,6 @@ describe('TimeModel', () => {
     expect(timeModel.minutes).toBeLessThan(60);
     expect(timeModel.seconds).toBeGreaterThanOrEqual(0);
     expect(timeModel.seconds).toBeLessThan(60);
-    expect(timeModel.is24HourFormat).toBe(true);
   });
 
   test('should increment seconds correctly', () => {
@@ -50,14 +49,6 @@ describe('TimeModel', () => {
     expect(timeModel.hours).toBe(now.getHours() + timeModel.timezone - TimeModel.defaultTimezone());
     expect(timeModel.minutes).toBe(now.getMinutes());
     expect(timeModel.seconds).toBe(now.getSeconds());
-  });
-
-  test('should toggle 24-hour format', () => {
-    expect(timeModel.is24HourFormat).toBe(true);
-    timeModel.toggle24HourFormat();
-    expect(timeModel.is24HourFormat).toBe(false);
-    timeModel.toggle24HourFormat();
-    expect(timeModel.is24HourFormat).toBe(true);
   });
 
   test('should set hours and minutes correctly', () => {

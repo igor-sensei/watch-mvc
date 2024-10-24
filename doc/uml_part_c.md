@@ -21,12 +21,10 @@ class TimeModel {
     + int minutes
     + int seconds
     + string timezone
-    + boolean is24HourFormat
 
     + incrementSeconds()
     + incrementMinutes()
     + incrementHours()
-    + toggle24HourFormat()
     + setTimezone(timezone : string)
 }
 
@@ -34,10 +32,12 @@ class WatchModel {
     - TimeModel time
     - string editMode
     - boolean lightOn
+    - boolean is24HourFormat
 
     + incrementTime()
     + toggleEditMode()
     + toggleLight()
+    + toggle24HourFormat()
     + resetTime()
 
     + getEditMode()

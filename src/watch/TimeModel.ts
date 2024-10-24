@@ -4,7 +4,6 @@ export class TimeModel {
     minutes: number;
     seconds: number;
     private _timezone: number; // Time zone offset in hours
-    private _is24HourFormat: boolean = true;
 
     constructor() {
         this._timezone = TimeModel.defaultTimezone();
@@ -43,13 +42,7 @@ export class TimeModel {
     get timezone(): number {
         return this._timezone;
     }
-    toggle24HourFormat(): void {
-        this._is24HourFormat = !this._is24HourFormat;
-    }
 
-    get is24HourFormat(): boolean {
-        return this._is24HourFormat;
-    }
     set timezone(value: number) {
         this.hours += value - this.timezone;
         this._timezone = value;

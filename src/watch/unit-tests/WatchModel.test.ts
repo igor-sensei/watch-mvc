@@ -15,6 +15,7 @@ describe('WatchModel', () => {
     expect(watch.time).toBe(time);
     expect(watch.editMode).toBe('NONE');
     expect(watch.isLightOn).toBe(false);
+    expect(watch.is24HourFormat).toBe(true);
   });
 
   test('should increment hours when editMode is HOURS', () => {
@@ -51,6 +52,15 @@ describe('WatchModel', () => {
     watch.toggleEditMode();
     expect(watch.editMode).toBe('NONE');
   });
+
+  test('should toggle 24-hour format', () => {
+    expect(watch.is24HourFormat).toBe(true);
+    watch.toggle24HourFormat();
+    expect(watch.is24HourFormat).toBe(false);
+    watch.toggle24HourFormat();
+    expect(watch.is24HourFormat).toBe(true);
+  });
+
 
   test('should toggle watch type between digital and analog', () => {
     expect(watch['_isDigital']).toBe(true);

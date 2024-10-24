@@ -7,6 +7,7 @@ export class WatchModel {
     private _editMode: "NONE" | "HOURS" | "MINUTES";
     private _isLightOn: boolean = false;
     private _isDigital: boolean = true;
+    private _is24HourFormat: boolean = true;
 
     // Analog watch state
     isDraggingMinuteHandle: boolean = false;
@@ -27,6 +28,9 @@ export class WatchModel {
     }
     get isLightOn(): boolean {
         return this._isLightOn;
+    }
+    get is24HourFormat(): boolean {
+        return this._is24HourFormat;
     }
 
     // Modify state
@@ -52,6 +56,9 @@ export class WatchModel {
         } else {
             this._editMode = "NONE";
         }
+    }
+    toggle24HourFormat(): void {
+        this._is24HourFormat = !this._is24HourFormat;
     }
 
     update() {

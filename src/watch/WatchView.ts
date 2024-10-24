@@ -189,7 +189,7 @@ export class WatchDisplay {
     private renderDigital(model: WatchModel): void {
         const time = model.time;
         const editMode = model.editMode;
-        let hourStr = time.is24HourFormat
+        let hourStr = model.is24HourFormat
             ? String(time.hours).padStart(2, "0")
             : String(time.hours % 12 || 12).padStart(2, "0");
         if (editMode === "HOURS")
@@ -200,7 +200,7 @@ export class WatchDisplay {
             minuteStr = `<span class="blink">${minuteStr}</span>`;
 
         let secondStr = String(time.seconds).padStart(2, "0");
-        let ampm = time.is24HourFormat ? "" : time.hours >= 12 ? " PM" : " AM";
+        let ampm = model.is24HourFormat ? "" : time.hours >= 12 ? " PM" : " AM";
         this._display.innerHTML = `${hourStr}:${minuteStr}:${secondStr}${ampm}`;
         this._display.style.backgroundColor = this.getLightColor(
             model.isLightOn,

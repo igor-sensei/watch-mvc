@@ -34,7 +34,7 @@ export class WatchController {
             } else if (target.classList.contains("reset-btn")) {
                 model.time.resetTime();
             } else if (target.classList.contains("24h-format-btn")) {
-                model.time.toggle24HourFormat();
+                model.toggle24HourFormat();
 
             } else if (target.classList.contains("ui-choice-btn")) {
                 model.toggleIsDigital();
