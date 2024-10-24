@@ -89,6 +89,38 @@ export class WatchView {
         document.body.appendChild(this._container);
     }
 
+    addEventListeners(model: WatchModel) {
+        this.buttonContainer.addEventListener("click", (event) => {
+            const target = event.target as HTMLElement;
+            if (target.classList.contains("mode-btn")) {
+                model.toggleEditMode();
+            } else if (target.classList.contains("increase-btn")) {
+                model.incrementTime();
+            } else if (target.classList.contains("light-btn")) {
+                model.toggleLight();
+            } else if (target.classList.contains("remove-btn")) {
+                event.stopPropagation(); // Prevent triggering drag events
+                const widget = target.parentElement.parentElement;
+                if (widget) {
+                    document.body.removeChild(widget);
+                }
+            } else if (target.classList.contains("reset-btn")) {
+                model.time.resetTime();
+            } else if (target.classList.contains("24h-format-btn")) {
+                model.toggle24HourFormat();
+
+            } else if (target.classList.contains("ui-choice-btn")) {
+                model.toggleIsDigital();
+                this.toggleIsDigital();
+                if (this.watchDisplay instanceof AnalogWatchDisplay)
+                    this.watchDisplay.addEventListeners(model);
+            }
+        });
+        this.timezoneSelect.addEventListener("change", () => {
+            model.time.timezone = Number(this.timezoneSelect.value);
+        });
+    }
+
     private findEmptyPosition() {
         let positionFound = false;
         const newWidgetRect = this._container.getBoundingClientRect();
@@ -266,5 +298,29 @@ export class AnalogWatchDisplay extends WatchDisplay {
         ctx.lineTo(endPoint.x, endPoint.y);
         ctx.strokeStyle = color;
         ctx.stroke();
+    }
+
+    addEventListeners(model: WatchModel) {
+        this.canvas.addEventListener("mousedown", (event) => {
+            if (model.editMode != "NONE") {
+                let [relMouseX, relMouseY] =
+                    this.getRelativeMousePosition(
+                        event.clientX,
+                        event.clientY,
+                    );
+                model.onMousedownEvent(relMouseX, relMouseY);
+            }
+        });
+        this.canvas.addEventListener("mousemove", (event) => {
+            let [relMouseX, relMouseY] = this.getRelativeMousePosition(
+                event.clientX,
+                event.clientY,
+            );
+            model.onMousemoveEvent(relMouseX, relMouseY);
+            this.render(model);
+        });
+        this.canvas.addEventListener("mouseup", () => {
+            model.onMouseupEvent();
+        });
     }
 }

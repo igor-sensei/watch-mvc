@@ -50,6 +50,7 @@ class WatchView {
     - HTMLElement displayContainer
 
     + render(WatchModel)
+    + addEventListeners(WatchModel)
     - findEmptyPosition()
 }
 
@@ -59,7 +60,6 @@ class WatchController {
 
     + WatchController(WatchModel, WatchView)
     + update()
-    + addEventListeners()
 }
 
 class PageController {

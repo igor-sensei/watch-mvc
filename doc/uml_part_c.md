@@ -61,6 +61,7 @@ class WatchView {
     + WatchDisplay watchDisplay
 
     + render(WatchModel)
+    + addEventListeners(WatchModel)
     - renderDigital(WatchModel)
     - renderAnalog(WatchModel)
     - findEmptyPosition()
@@ -72,7 +73,6 @@ class WatchController {
 
     + WatchController(WatchModel, WatchView)
     + update()
-    + addEventListeners()
 }
 
 class PageController {

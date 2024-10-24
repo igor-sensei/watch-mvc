@@ -8,68 +8,11 @@ export class WatchController {
     constructor(model: WatchModel, view: WatchView) {
         this.model = model;
         this.view = view;
-        this.addEventListeners(this.model, this.view);
+        this.view.addEventListeners(this.model);
     }
 
     update(): void {
         this.model.update();
         this.view.render(this.model);
-    }
-
-    private addEventListeners(model: WatchModel, view: WatchView) {
-        view.buttonContainer.addEventListener("click", (event) => {
-            const target = event.target as HTMLElement;
-            if (target.classList.contains("mode-btn")) {
-                model.toggleEditMode();
-            } else if (target.classList.contains("increase-btn")) {
-                model.incrementTime();
-            } else if (target.classList.contains("light-btn")) {
-                model.toggleLight();
-            } else if (target.classList.contains("remove-btn")) {
-                event.stopPropagation(); // Prevent triggering drag events
-                const widget = target.parentElement.parentElement;
-                if (widget) {
-                    document.body.removeChild(widget);
-                }
-            } else if (target.classList.contains("reset-btn")) {
-                model.time.resetTime();
-            } else if (target.classList.contains("24h-format-btn")) {
-                model.toggle24HourFormat();
-
-            } else if (target.classList.contains("ui-choice-btn")) {
-                model.toggleIsDigital();
-                view.toggleIsDigital();
-                if (view.watchDisplay instanceof AnalogWatchDisplay)
-                    this.addAnalogWatchEventListners(model, view.watchDisplay as AnalogWatchDisplay);
-            }
-        });
-        view.timezoneSelect.addEventListener("change", () => {
-            model.time.timezone = Number(view.timezoneSelect.value);
-        });
-    }
-
-    private addAnalogWatchEventListners(model: WatchModel, analogWatchDisplay: AnalogWatchDisplay) {
-        let canvas = analogWatchDisplay.canvas;
-        canvas.addEventListener("mousedown", (event) => {
-            if (model.editMode != "NONE") {
-                let [relMouseX, relMouseY] =
-                    analogWatchDisplay.getRelativeMousePosition(
-                        event.clientX,
-                        event.clientY,
-                    );
-                model.onMousedownEvent(relMouseX, relMouseY);
-            }
-        });
-        canvas.addEventListener("mousemove", (event) => {
-            let [relMouseX, relMouseY] = analogWatchDisplay.getRelativeMousePosition(
-                event.clientX,
-                event.clientY,
-            );
-            model.onMousemoveEvent(relMouseX, relMouseY);
-            this.view.render(model);
-        });
-        canvas.addEventListener("mouseup", () => {
-            model.onMouseupEvent();
-        });
     }
 }
