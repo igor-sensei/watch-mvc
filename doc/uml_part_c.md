@@ -9,7 +9,7 @@ This UML represents a Model-View-Controller (MVC) implementation of a system wit
 In Part C, an analog watch user interface was integrated into an existing architecture. Key elements of the design include:
 
 - A `Geometry` class is included to handle basic linear algebra operations that support UI positioning and drawing.
-- A new `WatchDisplay` class, which allows for displaying time either as an analog clock or a digital clock.
+- A new `WatchDisplay` class, which allows for displaying time either as an analog clock (`AnalogWatchDisplay`) or a digital clock (`DigitalWatchDisplay`).
 - Buttons defined in the `WatchView` are shared across both user interface options (analog and digital).
 This approach keeps the design consistent and simple.
 - `TimeModel`, `WatchModel`, and `Geometry` classes are designed to be easily unit-testable without the need for mocks.
@@ -44,8 +44,15 @@ class WatchModel {
     + isLightOn()
 }
 
-class WatchDisplay {
-    - bool isDigital
+abstract class WatchDisplay {
+    + render(WatchModel)
+}
+
+class DigitalWatchDisplay {
+    + render(WatchModel)
+}
+
+class AnalogWatchDisplay {
     + render(WatchModel)
 }
 

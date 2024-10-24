@@ -23,7 +23,7 @@ export class WatchView {
 
         this._displayContainer = document.createElement("div");
         this._displayContainer.id = "watch-display";
-        this.watchDisplay = new WatchDisplay(this._displayContainer);
+        this.watchDisplay = new DigitalWatchDisplay(this._displayContainer);
         this._container.appendChild(this._displayContainer);
 
         // Create the buttons
@@ -115,6 +115,14 @@ export class WatchView {
         return { top, left };
     }
 
+    toggleIsDigital(): void {
+        if (this.watchDisplay instanceof DigitalWatchDisplay) {
+            this.watchDisplay = new AnalogWatchDisplay(this._displayContainer);
+        } else {
+            this.watchDisplay = new DigitalWatchDisplay(this._displayContainer);
+        }
+    }
+
     get container(): HTMLElement {
         return this._container;
     }
@@ -130,63 +138,30 @@ export class WatchView {
     }
 }
 
-export class WatchDisplay {
+export abstract class WatchDisplay {
     readonly _display: HTMLElement;
-    private _isDigital: boolean = true;
-
-    private hourHandle: Point;
-    private minuteHandle: Point;
-    private secondHandle: Point;
-    private center: Point;
-    canvas: HTMLCanvasElement;
-
     constructor(display: HTMLElement) {
         this._display = display;
-        if (this._isDigital)
-            this._display.textContent = "00:00:00";
-        else
-            this._display.innerHTML =
-                '<canvas id="watchCanvas" width="400" height="400"></canvas>';
-        this.hourHandle = new Point(0, -50);
-        this.minuteHandle = new Point(0, -70);
-        this.secondHandle = new Point(0, -90);
-        this.center = new Point(0, 0);
     }
 
-    render(model: WatchModel): void {
-        if (this._isDigital) this.renderDigital(model);
-        else this.renderAnalog(model);
-    }
+    abstract render(model: WatchModel): void;
 
-    toggleIsDigital(): void {
-        if (this._isDigital) {
-            this._isDigital = false;
-            this._display.innerHTML =
-                '<canvas id="watchCanvas" width="400" height="400"></canvas>';
-            this.canvas = this._display.querySelector(
-                "canvas",
-            ) as HTMLCanvasElement;
-            this._display.appendChild(this.canvas);
-        } else {
-            this._isDigital = true;
-            this.canvas = null;
-            this._display.textContent = "00:00:00";
-        }
-    }
-
-    get isDigital(): boolean {
-        return this._isDigital;
-    }
-
-    private getLightColor(isLightOn: boolean): string {
+    protected getLightColor(isLightOn: boolean): string {
         if (isLightOn) {
             return "#FBE106";
         } else {
             return "#FFFFFF";
         }
     }
+}
 
-    private renderDigital(model: WatchModel): void {
+export class DigitalWatchDisplay extends WatchDisplay {
+    constructor(display: HTMLElement) {
+        super(display);
+        this._display.textContent = "00:00:00";
+    }
+
+    render(model: WatchModel): void {
         const time = model.time;
         const editMode = model.editMode;
         let hourStr = model.is24HourFormat
@@ -206,9 +181,33 @@ export class WatchDisplay {
             model.isLightOn,
         );
     }
+}
 
-    // Analog watch methods
-    private renderAnalog(model: WatchModel) {
+// Render an analog watch
+export class AnalogWatchDisplay extends WatchDisplay {
+    private hourHandle: Point;
+    private minuteHandle: Point;
+    private secondHandle: Point;
+    private center: Point;
+    canvas: HTMLCanvasElement;
+
+    constructor(display: HTMLElement) {
+        super(display);
+
+        this._display.innerHTML =
+            '<canvas id="watchCanvas" width="400" height="400"></canvas>';
+        this.canvas = this._display.querySelector(
+            "canvas",
+        ) as HTMLCanvasElement;
+        this._display.appendChild(this.canvas);
+
+        this.hourHandle = new Point(0, -50);
+        this.minuteHandle = new Point(0, -70);
+        this.secondHandle = new Point(0, -90);
+        this.center = new Point(0, 0);
+    }
+
+    render(model: WatchModel) {
         this.canvas.style.backgroundColor = this.getLightColor(model.isLightOn);
 
         const hourAngle =

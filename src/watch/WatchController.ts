@@ -1,5 +1,5 @@
 import { WatchModel } from "./WatchModel";
-import { WatchView } from "./WatchView";
+import { AnalogWatchDisplay, WatchView } from "./WatchView";
 
 export class WatchController {
     private model: WatchModel;
@@ -38,9 +38,9 @@ export class WatchController {
 
             } else if (target.classList.contains("ui-choice-btn")) {
                 model.toggleIsDigital();
-                view.watchDisplay.toggleIsDigital();
-                if (!view.watchDisplay.isDigital)
-                    this.addAnalogWatchEventListners(model, view);
+                view.toggleIsDigital();
+                if (view.watchDisplay instanceof AnalogWatchDisplay)
+                    this.addAnalogWatchEventListners(model, view.watchDisplay as AnalogWatchDisplay);
             }
         });
         view.timezoneSelect.addEventListener("change", () => {
@@ -48,12 +48,12 @@ export class WatchController {
         });
     }
 
-    private addAnalogWatchEventListners(model: WatchModel, view: WatchView) {
-        let canvas = view.watchDisplay.canvas;
+    private addAnalogWatchEventListners(model: WatchModel, analogWatchDisplay: AnalogWatchDisplay) {
+        let canvas = analogWatchDisplay.canvas;
         canvas.addEventListener("mousedown", (event) => {
             if (model.editMode != "NONE") {
                 let [relMouseX, relMouseY] =
-                    view.watchDisplay.getRelativeMousePosition(
+                    analogWatchDisplay.getRelativeMousePosition(
                         event.clientX,
                         event.clientY,
                     );
@@ -61,7 +61,7 @@ export class WatchController {
             }
         });
         canvas.addEventListener("mousemove", (event) => {
-            let [relMouseX, relMouseY] = view.watchDisplay.getRelativeMousePosition(
+            let [relMouseX, relMouseY] = analogWatchDisplay.getRelativeMousePosition(
                 event.clientX,
                 event.clientY,
             );
